@@ -13,9 +13,10 @@ export default function HeroSection() {
             <div
                 className="position-absolute top-0 start-0 w-100 h-100"
                 style={{
-                    backgroundImage: "url('https://images.unsplash.com/photo-1541888081696-6e8dd1c4d926?q=80&w=2670&auto=format&fit=crop')", // Use a nice concrete/construction stock image as placeholder
+                    backgroundImage: "url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=2670&auto=format&fit=crop')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
+                    backgroundColor: "#d9d9d9",
                     zIndex: -2,
                 }}
             ></div>

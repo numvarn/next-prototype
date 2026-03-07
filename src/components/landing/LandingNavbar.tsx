@@ -18,42 +18,68 @@ export default function LandingNavbar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
+            setIsScrolled(window.scrollY > 100);
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const handleNavClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
+    const textColor = isScrolled ? "#000000" : "#ffffff";
+
     return (
         <>
             <nav
-                className={`fixed top-0 w-100 z-3 transition-all duration-300 ${isScrolled ? "bg-white shadow py-2" : "bg-transparent py-4 text-white"
-                    }`}
-                style={{ zIndex: 1030 }}
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    width: "100%",
+                    padding: isScrolled ? "10px 0" : "15px 0",
+                    backgroundColor: isScrolled ? "#ffffff" : "rgba(255, 255, 255, 0)",
+                    boxShadow: isScrolled ? "0px 0 18px rgba(0, 0, 0, 0.1)" : "none",
+                    zIndex: 1030,
+                    transition: "all 0.5s",
+                }}
             >
                 <div className="container d-flex justify-content-between align-items-center">
                     {/* Logo */}
-                    <Link href="#hero" className="text-decoration-none me-auto">
+                    <Link href="#hero" className="text-decoration-none me-auto d-flex align-items-center gap-2">
                         <span
-                            className={`fs-3 fw-bold ${isScrolled ? "text-primary" : "text-dark"
-                                }`}
+                            className="fw-bold"
+                            style={{
+                                fontSize: "22px",
+                                color: textColor,
+                                transition: "color 0.3s",
+                            }}
                         >
-                            SLConcrete
+                            หจก.เอส แอล คอนกรีต
                         </span>
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="d-none d-lg-flex gap-4 align-items-center me-4">
+                    <div className="d-none d-lg-flex align-items-center" style={{ gap: 0 }}>
                         {navLinks.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className={`btn ${isScrolled ? "btn-primary" : "btn-light"}`}
+                                onClick={handleNavClick}
+                                style={{
+                                    color: textColor,
+                                    padding: "18px 15px",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    textDecoration: "none",
+                                    whiteSpace: "nowrap",
+                                    transition: "color 0.3s",
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--bs-primary)")}
+                                onMouseLeave={(e) => (e.currentTarget.style.color = textColor)}
                             >
                                 {link.name}
                             </a>
@@ -62,7 +88,18 @@ export default function LandingNavbar() {
 
                     {/* Desktop CTA */}
                     <div className="d-none d-lg-block">
-                        <a href="#contact" className={`btn ${isScrolled ? "btn-primary" : "btn-light"}`}>
+                        <a
+                            href="#contact"
+                            style={{
+                                color: "#fff",
+                                background: "var(--bs-primary)",
+                                fontSize: "14px",
+                                padding: "8px 26px",
+                                borderRadius: "4px",
+                                textDecoration: "none",
+                                transition: "0.3s",
+                            }}
+                        >
                             สอบถามข้อมูล
                         </a>
                     </div>
@@ -73,9 +110,9 @@ export default function LandingNavbar() {
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
                         {isMobileMenuOpen ? (
-                            <X size={28} className={isScrolled ? "text-dark" : "text-white"} />
+                            <X size={28} style={{ color: textColor, transition: "color 0.3s" }} />
                         ) : (
-                            <Menu size={28} className={isScrolled ? "text-dark" : "text-white"} />
+                            <Menu size={28} style={{ color: textColor, transition: "color 0.3s" }} />
                         )}
                     </button>
                 </div>
@@ -85,30 +122,52 @@ export default function LandingNavbar() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
+                        initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="fixed-top w-100 bg-white shadow-lg overflow-hidden d-lg-none"
-                        style={{ top: "60px", zIndex: 1020 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        style={{
+                            position: "fixed",
+                            top: "60px",
+                            left: "20px",
+                            right: "20px",
+                            backgroundColor: "#ffffff",
+                            borderRadius: "6px",
+                            boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.1)",
+                            zIndex: 1020,
+                            padding: "10px 0",
+                            overflow: "hidden",
+                        }}
+                        className="d-lg-none"
                     >
-                        <div className="d-flex flex-column p-4 gap-3">
+                        <div className="d-flex flex-column">
                             {navLinks.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-dark text-decoration-none fs-5 fw-medium border-bottom pb-2"
+                                    onClick={handleNavClick}
+                                    style={{
+                                        color: "#000000",
+                                        padding: "10px 20px",
+                                        fontSize: "17px",
+                                        fontWeight: 500,
+                                        textDecoration: "none",
+                                        transition: "color 0.3s",
+                                    }}
+                                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--bs-primary)")}
+                                    onMouseLeave={(e) => (e.currentTarget.style.color = "#000000")}
                                 >
                                     {link.name}
                                 </a>
                             ))}
-                            <a
-                                href="#contact"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="btn btn-primary mt-2"
-                            >
-                                สอบถามข้อมูล
-                            </a>
+                            <div style={{ padding: "10px 20px" }}>
+                                <a
+                                    href="#contact"
+                                    onClick={handleNavClick}
+                                    className="btn btn-primary w-100"
+                                >
+                                    สอบถามข้อมูล
+                                </a>
+                            </div>
                         </div>
                     </motion.div>
                 )}
