@@ -88,8 +88,8 @@ export default function LandingNavbar() {
 
                     {/* Desktop CTA */}
                     <div className="d-none d-lg-block">
-                        <a
-                            href="#contact"
+                        <Link
+                            href="/login"
                             style={{
                                 color: "#fff",
                                 background: "var(--bs-primary)",
@@ -101,7 +101,7 @@ export default function LandingNavbar() {
                             }}
                         >
                             เข้าสู่ระบบ
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Toggle */}
