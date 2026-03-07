@@ -8,32 +8,32 @@ export default function ServiceSection() {
         {
             title: "คอนกรีตผสมเสร็จ",
             desc: "มาตรฐานสูงสำหรับงานเทพื้น เทคาน โครงสร้างต่างๆ",
-            imageUrl: "https://images.unsplash.com/photo-1574744040954-3c9f2eb5df38?q=80&w=2670&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2668&auto=format&fit=crop", // concrete pouring
         },
         {
             title: "แผ่นพื้นสำเร็จรูป",
             desc: "แผ่นพื้นแบบกลวง (Hollow Core) และแบบท้องเรียบ (Solid Plank)",
-            imageUrl: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2662&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2787&auto=format&fit=crop", // concrete slab/structure
         },
         {
             title: "ท่อคอนกรีต คสล.",
             desc: "ท่อระบายน้ำ ท่อคสล. ทุกขนาดมาตรฐานและรับน้ำหนักได้สูง",
-            imageUrl: "https://plus.unsplash.com/premium_photo-1661962360520-22c929a6e60b?q=80&w=2670&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1584464457692-73a74bf08c4e?q=80&w=2670&auto=format&fit=crop", // concrete pipes
         },
         {
             title: "เสาเข็มอัดแรง",
             desc: "เสาเข็มคอนกรีตอัดแรง พร้อมบริการปั้นจั่นตอกเสาเข็ม",
-            imageUrl: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2670&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1541888081696-6e8dd1c4d926?q=80&w=2670&auto=format&fit=crop", // construction site/pillars
         },
         {
             title: "รั้วสำเร็จรูป/บ่อพัก",
             desc: "งานรั้วคสล. และบ่อพักน้ำขนาดมาตรฐาน สำหรับทุกโครงการ",
-            imageUrl: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2670&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1506509657064-a63459c5a175?q=80&w=2670&auto=format&fit=crop", // concrete wall/fence
         },
         {
             title: "บริการเครื่องจักร",
             desc: "บริการให้เช่ารถโม่ผสมคอนกรีต, รถเครน, รถแบคโฮ, และรถตัก",
-            imageUrl: "https://images.unsplash.com/photo-1621844286708-3ab9a3e200bb?q=80&w=2670&auto=format&fit=crop",
+            imageUrl: "https://images.unsplash.com/photo-1579541094709-644cb3f9e9d1?q=80&w=2670&auto=format&fit=crop", // construction machinery
         },
     ];
 
