@@ -100,7 +100,7 @@ export default function ContactSection() {
                             style={{ paddingBottom: "75%", backgroundColor: "#e2e8f0" }}
                         >
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15444.664214436575!2d104.3039019665671!3d15.088663806086774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3110e53a55ed9c09%3A0xe76e3cc7ef26db5e!2z4LmA4Lit4LiqIOC5geC4reC4pSDguITguK3guJnguIHguKPguLXguJU!5e0!3m2!1sth!2sth!4v1708412000000!5m2!1sth!2sth"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15444.664214436575!2d104.34028852958151!3d15.089748566970512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3110e53a55ed9c09%3A0xe76e3cc7ef26db5e!2z4LmA4Lit4LiqIOC5geC4reC4pSDguITguK3guJnguIHguKPguLXguJU!5e0!3m2!1sth!2sth!4v1708412000000!5m2!1sth!2sth"
                                 className="position-absolute top-0 start-0 w-100 h-100 border-0"
                                 allowFullScreen={false}
                                 loading="lazy"
