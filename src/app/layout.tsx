@@ -3,6 +3,7 @@ import { Noto_Sans_Thai, Prompt } from "next/font/google";
 import {
   BootstrapClient,
 } from "@/components/layout";
+import { NextAuthProvider } from "@/components/layout/NextAuthProvider";
 import "./globals.css";
 
 const notoSansThai = Noto_Sans_Thai({
@@ -30,10 +31,12 @@ export default function RootLayout({
   return (
     <html lang="th" className={`${notoSansThai.variable} ${prompt.variable}`}>
       <body>
-        <BootstrapClient />
-        <main className="main-wrapper">
-          {children}
-        </main>
+        <NextAuthProvider>
+          <BootstrapClient />
+          <main className="main-wrapper">
+            {children}
+          </main>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 
 const navLinks = [
     { name: "หน้าแรก", href: "#hero" },
@@ -15,6 +16,7 @@ const navLinks = [
 export default function LandingNavbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { data: session } = useSession();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -87,21 +89,59 @@ export default function LandingNavbar() {
                     </div>
 
                     {/* Desktop CTA */}
-                    <div className="d-none d-lg-block">
-                        <Link
-                            href="/login"
-                            style={{
-                                color: "#fff",
-                                background: "var(--bs-primary)",
-                                fontSize: "14px",
-                                padding: "8px 26px",
-                                borderRadius: "4px",
-                                textDecoration: "none",
-                                transition: "0.3s",
-                            }}
-                        >
-                            เข้าสู่ระบบ
-                        </Link>
+                    <div className="d-none d-lg-flex gap-2">
+                        {session ? (
+                            <>
+                                {(session.user.role === 'Admin' || session.user.role === 'Staff') && (
+                                    <Link
+                                        href="/admin/dashboard"
+                                        style={{
+                                            color: "#fff",
+                                            background: "var(--bs-primary)",
+                                            fontSize: "14px",
+                                            padding: "8px 20px",
+                                            borderRadius: "4px",
+                                            border: "none",
+                                            cursor: "pointer",
+                                            textDecoration: "none",
+                                            transition: "0.3s",
+                                        }}
+                                    >
+                                        แดชบอร์ด
+                                    </Link>
+                                )}
+                                <button
+                                    onClick={() => signOut()}
+                                    style={{
+                                        color: "#fff",
+                                        background: "var(--bs-primary)",
+                                        fontSize: "14px",
+                                        padding: "8px 20px",
+                                        borderRadius: "4px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                        transition: "0.3s",
+                                    }}
+                                >
+                                    ออกจากระบบ
+                                </button>
+                            </>
+                        ) : (
+                            <Link
+                                href="/login"
+                                style={{
+                                    color: "#fff",
+                                    background: "var(--bs-primary)",
+                                    fontSize: "14px",
+                                    padding: "8px 26px",
+                                    borderRadius: "4px",
+                                    textDecoration: "none",
+                                    transition: "0.3s",
+                                }}
+                            >
+                                เข้าสู่ระบบ
+                            </Link>
+                        )}
                     </div>
 
                     {/* Mobile Menu Toggle */}

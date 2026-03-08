@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import LoginNavbar from "@/components/landing/LoginNavbar";
 import Footer from "@/components/landing/Footer";
 import { Mail, Lock, LogIn, CheckCircle2, Circle, ArrowRight } from "lucide-react";
@@ -8,23 +9,34 @@ import { Mail, Lock, LogIn, CheckCircle2, Circle, ArrowRight } from "lucide-reac
 export default function LoginPage() {
     const [loginLoading, setLoginLoading] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoginLoading(true);
-        // Simulate login delay
-        setTimeout(() => {
-            setLoginLoading(false);
-            // In a real app, successful login logic would be here
-        }, 1500);
-    };
+        setErrorMsg("");
 
-    // Dummy tasks data
-    const tasks = [
-        { id: 1, text: "ตรวจสอบสต็อกปูนซีเมนต์ประจำสัปดาห์", completed: true },
-        { id: 2, text: "ยืนยันออเดอร์จัดส่งคอนกรีตผสมเสร็จ ไซต์งาน A", completed: false },
-        { id: 3, text: "สรุปยอดขายประจำเดือน", completed: false },
-        { id: 4, text: "ประสานงานทีมช่างซ่อมบำรุงรถโม่ปูน", completed: false },
-    ];
+        try {
+            const res = await signIn("credentials", {
+                username,
+                password,
+                redirect: false,
+            });
+
+            if (res?.error) {
+                setErrorMsg(res.error);
+                setLoginLoading(false);
+            } else {
+                // Let middleware handle the routing by refreshing or pushing
+                window.location.href = "/admin/dashboard"; // Let middleware intercept or reload
+            }
+        } catch (error) {
+            setErrorMsg("เกิดข้อผิดพลาดในการลงชื่อเข้าใช้");
+            setLoginLoading(false);
+        }
+    };
 
     return (
         <>
@@ -56,17 +68,25 @@ export default function LoginPage() {
                                         <p className="text-muted">เข้าสู่ระบบเพื่อจัดการระบบของหจก.เอส แอล คอนกรีต</p>
                                     </div>
 
+                                    {errorMsg && (
+                                        <div className="alert alert-danger py-2 mb-4" role="alert">
+                                            {errorMsg}
+                                        </div>
+                                    )}
+
                                     <form onSubmit={handleLogin}>
                                         <div className="mb-4">
-                                            <label className="form-label fw-medium">อีเมล</label>
+                                            <label className="form-label fw-medium">ชื่อผู้ใช้งาน</label>
                                             <div className="input-group">
                                                 <span className="input-group-text bg-light border-end-0">
                                                     <Mail size={18} className="text-muted" />
                                                 </span>
                                                 <input
-                                                    type="email"
+                                                    type="text"
                                                     className="form-control form-control-lg border-start-0 ps-0"
-                                                    placeholder="กรอกอีเมลของคุณ"
+                                                    placeholder="กรอกชื่อผู้ใช้งานของคุณ"
+                                                    value={username}
+                                                    onChange={(e) => setUsername(e.target.value)}
                                                     required
                                                 />
                                             </div>
@@ -75,7 +95,6 @@ export default function LoginPage() {
                                         <div className="mb-4">
                                             <div className="d-flex justify-content-between align-items-center mb-1">
                                                 <label className="form-label fw-medium mb-0">รหัสผ่าน</label>
-                                                <a href="#" className="text-decoration-none small text-primary">ลืมรหัสผ่าน?</a>
                                             </div>
                                             <div className="input-group">
                                                 <span className="input-group-text bg-light border-end-0">
@@ -85,19 +104,16 @@ export default function LoginPage() {
                                                     type="password"
                                                     className="form-control form-control-lg border-start-0 ps-0"
                                                     placeholder="กรอกรหัสผ่านของคุณ"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
                                                     required
                                                 />
                                             </div>
                                         </div>
 
-                                        <div className="mb-4 form-check">
-                                            <input type="checkbox" className="form-check-input" id="rememberMe" />
-                                            <label className="form-check-label text-muted" htmlFor="rememberMe">จดจำฉันไว้ในระบบ</label>
-                                        </div>
-
                                         <button
                                             type="submit"
-                                            className="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center gap-2"
+                                            className="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center gap-2 mt-4"
                                             disabled={loginLoading}
                                             style={{ borderRadius: "8px" }}
                                         >

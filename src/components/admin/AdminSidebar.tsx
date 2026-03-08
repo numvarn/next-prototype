@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
     LayoutDashboard,
     Users,
@@ -21,6 +22,7 @@ const menuItems = [
 
 export default function AdminSidebar() {
     const pathname = usePathname();
+    const { data: session } = useSession();
 
     return (
         <aside className="bg-white border-end shadow-sm flex-shrink-0 d-flex flex-column" style={{ width: '280px', minHeight: 'calc(100vh - 60px)' }}>
@@ -54,11 +56,11 @@ export default function AdminSidebar() {
             <div className="mt-auto p-4 border-top">
                 <div className="bg-light rounded p-3 d-flex align-items-center gap-3">
                     <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                        <span className="fw-bold">A</span>
+                        <span className="fw-bold">{session?.user?.username?.charAt(0).toUpperCase() || 'A'}</span>
                     </div>
                     <div>
-                        <div className="fw-bold small">Administrator</div>
-                        <div className="text-muted extra-small">admin@slconcrete.com</div>
+                        <div className="fw-bold small">{session?.user?.username || 'Administrator'}</div>
+                        <div className="text-muted extra-small">{session?.user?.role || 'admin@slconcrete.com'}</div>
                     </div>
                 </div>
             </div>

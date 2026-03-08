@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { LogOut, Home } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export default function AdminNavbar() {
     return (
@@ -33,7 +34,7 @@ export default function AdminNavbar() {
                             </Link>
                         </li>
                         <li className="nav-item ms-lg-3">
-                            <button className="btn btn-outline-light btn-sm d-flex align-items-center gap-2 rounded-pill px-3">
+                            <button onClick={() => signOut({ callbackUrl: '/login' })} className="btn btn-outline-light btn-sm d-flex align-items-center gap-2 rounded-pill px-3">
                                 <LogOut size={16} />
                                 <span>ออกจากระบบ</span>
                             </button>
