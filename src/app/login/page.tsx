@@ -65,7 +65,7 @@ export default function LoginPage() {
                                                 </span>
                                                 <input
                                                     type="email"
-                                                    className="form-control border-start-0 ps-0"
+                                                    className="form-control form-control-lg border-start-0 ps-0"
                                                     placeholder="กรอกอีเมลของคุณ"
                                                     required
                                                 />
@@ -83,7 +83,7 @@ export default function LoginPage() {
                                                 </span>
                                                 <input
                                                     type="password"
-                                                    className="form-control border-start-0 ps-0"
+                                                    className="form-control form-control-lg border-start-0 ps-0"
                                                     placeholder="กรอกรหัสผ่านของคุณ"
                                                     required
                                                 />
@@ -116,57 +116,6 @@ export default function LoginPage() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Todo List Section */}
-                        <div className="col-lg-5 col-md-8">
-                            <div className="card shadow-sm border-0 h-100 bg-white" style={{ borderRadius: "12px" }}>
-                                <div className="card-body p-4 p-md-5">
-                                    <h3 className="fw-bold mb-4" style={{ color: "var(--bs-primary)" }}>
-                                        รายการสิ่งที่ต้องทำ
-                                    </h3>
-                                    <p className="text-muted mb-4">
-                                        ภาพรวมรายการงานของคุณประจำวันนี้
-                                    </p>
-
-                                    <div className="d-flex flex-column gap-3">
-                                        {tasks.map((task) => (
-                                            <div
-                                                key={task.id}
-                                                className={`p-3 rounded-3 d-flex align-items-start gap-3 transition-all ${task.completed ? "bg-light text-muted" : "border border-primary border-opacity-25"
-                                                    }`}
-                                                style={{
-                                                    backgroundColor: task.completed ? "" : "rgba(var(--bs-primary-rgb), 0.02)",
-                                                }}
-                                            >
-                                                <div className="mt-1">
-                                                    {task.completed ? (
-                                                        <CheckCircle2 size={22} className="text-success" />
-                                                    ) : (
-                                                        <Circle size={22} className="text-primary" />
-                                                    )}
-                                                </div>
-                                                <div className="flex-grow-1">
-                                                    <span
-                                                        className={`fw-medium ${task.completed ? "text-decoration-line-through" : ""}`}
-                                                        style={{ fontSize: "15px" }}
-                                                    >
-                                                        {task.text}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                </div>
-                                <div className="card-footer bg-transparent border-top-0 p-4 pt-0">
-                                    <div className="alert alert-info border-0 d-flex gap-2 mb-0" style={{ backgroundColor: "rgba(13, 202, 240, 0.1)", color: "#087990" }}>
-                                        <div className="fw-semibold">💡 เคล็ดลับ:</div>
-                                        <div className="small">เข้าสู่ระบบเพื่อจัดการและอัปเดตสถานะงานของคุณแบบเรียลไทม์</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </main>
