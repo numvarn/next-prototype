@@ -62,7 +62,7 @@ export default function UserManagementPage() {
         lastName: "",
         email: "",
         password: "",
-        role: "User" as const,
+        role: "User" as User["role"],
     });
 
     const filteredUsers = users.filter(user =>
