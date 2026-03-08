@@ -1,4 +1,12 @@
-export default function AdminDashboard() {
+import { prisma } from "@/lib/prisma";
+
+export default async function AdminDashboard() {
+    const recentActivities = await prisma.activityLog.findMany({
+        take: 10,
+        orderBy: { createdAt: 'desc' },
+        include: { user: true }
+    });
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -36,23 +44,24 @@ export default function AdminDashboard() {
                         <table className="table table-hover align-middle">
                             <thead className="table-light">
                                 <tr>
-                                    <th>กิรกรรม</th>
+                                    <th>กิจกรรม</th>
                                     <th>ผู้ใช้งาน</th>
                                     <th>เวลา</th>
-                                    <th>สถานะ</th>
+                                    <th>รายละเอียด</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {[
-                                    { action: "แก้ไขข้อมูลสินค้า", user: "Admin", time: "2 นาทีที่แล้ว", status: "สำเร็จ" },
-                                    { action: "เพิ่มผู้ใช้งานใหม่", user: "Manager", time: "1 ชั่วโมงที่แล้ว", status: "สำเร็จ" },
-                                    { action: "ลบรายการสั่งซื้อ", user: "Admin", time: "3 ชั่วโมงที่แล้ว", status: "รอดำเนินการ" },
-                                ].map((row, idx) => (
-                                    <tr key={idx}>
-                                        <td>{row.action}</td>
-                                        <td>{row.user}</td>
-                                        <td>{row.time}</td>
-                                        <td><span className={`badge rounded-pill bg-${row.status === 'สำเร็จ' ? 'success' : 'warning'}`}>{row.status}</span></td>
+                                {recentActivities.map((log: any) => (
+                                    <tr key={log.id}>
+                                        <td>{log.action}</td>
+                                        <td>{log.user?.username || 'Unknown'}</td>
+                                        <td>
+                                            {new Intl.DateTimeFormat('th-TH', {
+                                                dateStyle: 'short',
+                                                timeStyle: 'medium',
+                                            }).format(new Date(log.createdAt))}
+                                        </td>
+                                        <td><span className="text-muted small">{log.details || '-'}</span></td>
                                     </tr>
                                 ))}
                             </tbody>

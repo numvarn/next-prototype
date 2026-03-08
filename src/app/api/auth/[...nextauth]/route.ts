@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma"; // Assuming we created this earlier
+import { logActivity } from "@/lib/activity";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -29,6 +30,8 @@ export const authOptions: NextAuthOptions = {
                 if (!isValid) {
                     throw new Error("รหัสผ่านไม่ถูกต้อง");
                 }
+
+                await logActivity(user.id, "เข้าสู่ระบบ", "เข้าสู่ระบบสำเร็จ");
 
                 return {
                     id: user.id,
