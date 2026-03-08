@@ -3,7 +3,7 @@
 This profile provides instructions and context for AI systems working on the SL Concrete Prototype project.
 
 ## Project Overview
-- **Name**: SL Concrete Prototype
+- **Name**: prototype (SL Concrete Prototype)
 - **Purpose**: Landing page and management system for SL Concrete (Ready-mixed concrete).
 - **Core Stack**: Next.js (App Router), React 19, TypeScript, Bootstrap 5.3, Framer Motion.
 - **Language**: UI and most content are in **Thai**. Logic and code structure are in English.
