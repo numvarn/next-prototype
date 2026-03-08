@@ -27,6 +27,7 @@ interface UserManagementClientProps {
 
 export default function UserManagementClient({ initialUsers }: UserManagementClientProps) {
     const [searchTerm, setSearchTerm] = useState("");
+    const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState<UserData | null>(null);
     const [formData, setFormData] = useState({
@@ -43,9 +44,24 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
     const users = initialUsers;
 
     const filteredUsers = users.filter(user =>
-        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+        user.username.toLowerCase().includes(appliedSearchTerm.toLowerCase()) ||
+        `${user.firstName} ${user.lastName}`.toLowerCase().includes(appliedSearchTerm.toLowerCase())
     );
+
+    const handleSearch = () => {
+        setAppliedSearchTerm(searchTerm);
+    };
+
+    const handleReset = () => {
+        setSearchTerm("");
+        setAppliedSearchTerm("");
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
 
     const handleOpenModal = (user: UserData | null = null) => {
         if (user) {
@@ -185,18 +201,33 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
 
             <div className="card border-0 shadow-sm p-3 mb-4">
                 <div className="row align-items-center g-3">
-                    <div className="col-md-6 col-lg-4">
-                        <div className="input-group">
-                            <span className="input-group-text bg-transparent border-end-0">
-                                <Search size={18} className="text-muted" />
-                            </span>
-                            <input
-                                type="text"
-                                className="form-control border-start-0"
-                                placeholder="ค้นหาตามชื่อ หรือ ชื่อผู้ใช้..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                    <div className="col-md-8 col-lg-6">
+                        <div className="d-flex gap-2">
+                            <div className="input-group flex-grow-1">
+                                <span className="input-group-text bg-transparent border-end-0">
+                                    <Search size={18} className="text-muted" />
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control border-start-0"
+                                    placeholder="ค้นหาตามชื่อ หรือ ชื่อผู้ใช้..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                />
+                            </div>
+                            <button
+                                onClick={handleSearch}
+                                className="btn btn-primary px-4 shadow-sm"
+                            >
+                                ค้นหา
+                            </button>
+                            <button
+                                onClick={handleReset}
+                                className="btn btn-outline-secondary px-3 shadow-sm"
+                            >
+                                รีเซ็ต
+                            </button>
                         </div>
                     </div>
                 </div>
