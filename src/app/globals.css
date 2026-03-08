@@ -119,3 +119,9 @@ section {
   flex-direction: column;
   min-height: 100vh;
 }
+
+/* Admin Dashboard Utilities */
+.ls-wider { letter-spacing: 0.1em; }
+.extra-small { font-size: 0.75rem; }
+.hover-bg-light:hover { background-color: #f8f9fa; }
+.transition-all { transition: all 0.2s ease; }

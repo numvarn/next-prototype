@@ -49,8 +49,8 @@ export default function LoginNavbar() {
                     </span>
                 </Link>
 
-                {/* Home Button */}
-                <div>
+                {/* Action Buttons */}
+                <div className="d-flex gap-2">
                     <Link
                         href="/"
                         className="btn d-flex align-items-center gap-2"
@@ -66,6 +66,21 @@ export default function LoginNavbar() {
                     >
                         <House size={18} />
                         หน้าแรก
+                    </Link>
+                    <Link
+                        href="/admin/dashboard"
+                        className="btn d-flex align-items-center gap-2"
+                        style={{
+                            color: isScrolled ? "var(--bs-primary)" : "#ffffff",
+                            backgroundColor: isScrolled ? "rgba(var(--bs-primary-rgb), 0.1)" : "rgba(255,255,255,0.2)",
+                            fontWeight: 500,
+                            padding: "8px 20px",
+                            borderRadius: "50px",
+                            transition: "all 0.3s",
+                            border: "none",
+                        }}
+                    >
+                        แดชบอร์ด
                     </Link>
                 </div>
             </div>
