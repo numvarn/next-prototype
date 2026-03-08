@@ -199,14 +199,37 @@ export default function LandingNavbar() {
                                     {link.name}
                                 </a>
                             ))}
-                            <div style={{ padding: "10px 20px" }}>
-                                <a
-                                    href="#contact"
-                                    onClick={handleNavClick}
-                                    className="btn btn-primary w-100"
-                                >
-                                    สอบถามข้อมูล
-                                </a>
+                            <div className="d-flex flex-column gap-2" style={{ padding: "10px 20px" }}>
+                                {session ? (
+                                    <>
+                                        {(session.user.role === 'Admin' || session.user.role === 'Staff') && (
+                                            <Link
+                                                href="/admin/dashboard"
+                                                onClick={handleNavClick}
+                                                className="btn btn-primary w-100"
+                                            >
+                                                แดชบอร์ด
+                                            </Link>
+                                        )}
+                                        <button
+                                            onClick={() => {
+                                                handleNavClick();
+                                                signOut();
+                                            }}
+                                            className="btn btn-primary w-100"
+                                        >
+                                            ออกจากระบบ
+                                        </button>
+                                    </>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        onClick={handleNavClick}
+                                        className="btn btn-primary w-100"
+                                    >
+                                        เข้าสู่ระบบ
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </motion.div>
