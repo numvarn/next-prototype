@@ -23,7 +23,7 @@ export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="bg-white border-end shadow-sm flex-shrink-0" style={{ width: '280px', minHeight: 'calc(100vh - 60px)' }}>
+        <aside className="bg-white border-end shadow-sm flex-shrink-0 d-flex flex-column" style={{ width: '280px', minHeight: 'calc(100vh - 60px)' }}>
             <div className="py-4">
                 <div className="px-4 mb-4">
                     <small className="text-uppercase text-muted fw-bold ls-wider">เมนูหลัก</small>
