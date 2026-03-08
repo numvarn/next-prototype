@@ -9,11 +9,15 @@ import {
     Trash2,
     UserCircle
 } from "lucide-react";
+import { createUserAction, updateUserAction, deleteUserAction } from "@/app/actions/user";
 
 export interface UserData {
     id: string;
     username: string;
     role: "Admin" | "Staff" | "User";
+    firstName: string;
+    lastName: string;
+    phone: string;
     createdAt: string;
 }
 
@@ -22,7 +26,6 @@ interface UserManagementClientProps {
 }
 
 export default function UserManagementClient({ initialUsers }: UserManagementClientProps) {
-    const [users, setUsers] = useState<UserData[]>(initialUsers);
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState<UserData | null>(null);
@@ -30,10 +33,18 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
         username: "",
         password: "",
         role: "User" as UserData["role"],
+        firstName: "",
+        lastName: "",
+        phone: "",
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Use initialUsers directly since Server Actions and revalidatePath will update props
+    const users = initialUsers;
 
     const filteredUsers = users.filter(user =>
-        user.username.toLowerCase().includes(searchTerm.toLowerCase())
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleOpenModal = (user: UserData | null = null) => {
@@ -43,6 +54,9 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                 username: user.username,
                 password: "", // Keep password empty when editing
                 role: user.role,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone || "",
             });
         } else {
             setEditingUser(null);
@@ -50,6 +64,9 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                 username: "",
                 password: "",
                 role: "User",
+                firstName: "",
+                lastName: "",
+                phone: "",
             });
         }
         setShowModal(true);
@@ -62,48 +79,46 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // TODO: In a real app, call Server Actions or API routes here.
-        // For now, we update the state to reflect the UI changes.
+        setIsSubmitting(true);
 
         if (editingUser) {
-            setUsers(users.map(u => u.id === editingUser.id ? {
-                ...u,
-                username: formData.username,
-                role: formData.role
-            } : u));
-            Swal.fire({
-                title: "อัปเดตสำเร็จ!",
-                text: "ข้อมูลผู้ใช้งานได้รับการแก้ไขแล้ว",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false,
-                background: "#ffffff",
-                customClass: {
-                    popup: 'shadow-sm border-0 rounded-4',
-                }
-            });
+            const res = await updateUserAction(editingUser.id, formData);
+            if (res.success) {
+                Swal.fire({
+                    title: "อัปเดตสำเร็จ!",
+                    text: "ข้อมูลผู้ใช้งานได้รับการแก้ไขแล้ว",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: "#ffffff",
+                    customClass: {
+                        popup: 'shadow-sm border-0 rounded-4',
+                    }
+                });
+                handleCloseModal();
+            } else {
+                Swal.fire("ข้อผิดพลาด", res.error || "เกิดข้อผิดพลาดในการอัปเดต", "error");
+            }
         } else {
-            const newUser: UserData = {
-                id: Math.random().toString(36).substr(2, 9),
-                username: formData.username,
-                role: formData.role,
-                createdAt: new Date().toISOString().split('T')[0],
-            };
-            setUsers([...users, newUser]);
-            Swal.fire({
-                title: "สร้างสำเร็จ!",
-                text: "เพิ่มผู้ใช้งานใหม่เรียบร้อยแล้ว",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false,
-                background: "#ffffff",
-                customClass: {
-                    popup: 'shadow-sm border-0 rounded-4',
-                }
-            });
+            const res = await createUserAction(formData);
+            if (res.success) {
+                Swal.fire({
+                    title: "สร้างสำเร็จ!",
+                    text: "เพิ่มผู้ใช้งานใหม่เรียบร้อยแล้ว",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: "#ffffff",
+                    customClass: {
+                        popup: 'shadow-sm border-0 rounded-4',
+                    }
+                });
+                handleCloseModal();
+            } else {
+                Swal.fire("ข้อผิดพลาด", res.error || "เกิดข้อผิดพลาดในการสร้าง", "error");
+            }
         }
-        handleCloseModal();
+        setIsSubmitting(false);
     };
 
     const handleDelete = (id: string) => {
@@ -122,21 +137,24 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                 confirmButton: 'rounded-pill px-4',
                 cancelButton: 'rounded-pill px-4'
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                // TODO: Actual API call here
-                setUsers(users.filter(u => u.id !== id));
-                Swal.fire({
-                    title: "ลบสำเร็จ!",
-                    text: "ผู้ใช้งานถูกลบออกจากระบบแล้ว",
-                    icon: "success",
-                    timer: 1500,
-                    showConfirmButton: false,
-                    background: "#ffffff",
-                    customClass: {
-                        popup: 'shadow-sm border-0 rounded-4',
-                    }
-                });
+                const res = await deleteUserAction(id);
+                if (res.success) {
+                    Swal.fire({
+                        title: "ลบสำเร็จ!",
+                        text: "ผู้ใช้งานถูกลบออกจากระบบแล้ว",
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false,
+                        background: "#ffffff",
+                        customClass: {
+                            popup: 'shadow-sm border-0 rounded-4',
+                        }
+                    });
+                } else {
+                    Swal.fire("ข้อผิดพลาด", res.error || "เกิดข้อผิดพลาดในการลบ", "error");
+                }
             }
         });
     };
@@ -175,7 +193,7 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                             <input
                                 type="text"
                                 className="form-control border-start-0"
-                                placeholder="ค้นหาตามชื่อผู้ใช้..."
+                                placeholder="ค้นหาตามชื่อ หรือ ชื่อผู้ใช้..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -189,7 +207,9 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                     <table className="table table-hover align-middle mb-0">
                         <thead className="table-light">
                             <tr>
-                                <th className="ps-4 py-3">ชื่อผู้ใช้งาน</th>
+                                <th className="ps-4 py-3">ผู้ใช้งาน</th>
+                                <th className="py-3">ชื่อสำหรับเข้าสู่ระบบ</th>
+                                <th className="py-3">เบอร์โทร</th>
                                 <th className="py-3">บทบาท</th>
                                 <th className="py-3">วันที่เริ่มใช้งาน</th>
                                 <th className="pe-4 py-3 text-end">จัดการ</th>
@@ -205,11 +225,13 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                                                     <UserCircle size={24} />
                                                 </div>
                                                 <div>
-                                                    <div className="fw-bold">{user.username}</div>
+                                                    <div className="fw-bold">{user.firstName} {user.lastName}</div>
                                                     <small className="text-muted">ID: {user.id}</small>
                                                 </div>
                                             </div>
                                         </td>
+                                        <td>{user.username}</td>
+                                        <td>{user.phone || "-"}</td>
                                         <td>
                                             <span className={`badge rounded-pill px-3 py-2 ${getRoleBadge(user.role)}`}>
                                                 {user.role}
@@ -240,7 +262,7 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5} className="text-center py-5 text-muted">ไม่พบข้อมูลผู้ใช้งาน</td>
+                                    <td colSpan={6} className="text-center py-5 text-muted">ไม่พบข้อมูลผู้ใช้งาน</td>
                                 </tr>
                             )}
                         </tbody>
@@ -268,10 +290,45 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                                             type="button"
                                             className="btn-close"
                                             onClick={handleCloseModal}
+                                            disabled={isSubmitting}
                                         ></button>
                                     </div>
                                     <div className="modal-body px-4">
                                         <div className="row g-3">
+                                            {/* Profile Information */}
+                                            <div className="col-md-6">
+                                                <label className="form-label small fw-bold">ชื่อ (First Name)</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    required
+                                                    value={formData.firstName}
+                                                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label className="form-label small fw-bold">นามสกุล (Last Name)</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    required
+                                                    value={formData.lastName}
+                                                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                                />
+                                            </div>
+                                            <div className="col-12">
+                                                <label className="form-label small fw-bold">เบอร์โทรติดต่อ (Phone)</label>
+                                                <input
+                                                    type="tel"
+                                                    className="form-control"
+                                                    value={formData.phone}
+                                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                                />
+                                            </div>
+
+                                            <div className="col-12"><hr className="my-2" /></div>
+
+                                            {/* User Auth Information */}
                                             <div className="col-12">
                                                 <label className="form-label small fw-bold">ชื่อผู้ใช้งาน (Username)</label>
                                                 <input
@@ -312,11 +369,12 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
                                             type="button"
                                             className="btn btn-light"
                                             onClick={handleCloseModal}
+                                            disabled={isSubmitting}
                                         >
                                             ยกเลิก
                                         </button>
-                                        <button type="submit" className="btn btn-primary px-4 shadow-sm">
-                                            {editingUser ? "บันทึกการเปลี่ยนแปลง" : "สร้างผู้ใช้งาน"}
+                                        <button type="submit" className="btn btn-primary px-4 shadow-sm" disabled={isSubmitting}>
+                                            {isSubmitting ? "กำลังดำเนินการ..." : (editingUser ? "บันทึกการเปลี่ยนแปลง" : "สร้างผู้ใช้งาน")}
                                         </button>
                                     </div>
                                 </form>
