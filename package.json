@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:backup": "node ./backup/backup.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",
